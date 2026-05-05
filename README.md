@@ -31,3 +31,7 @@ SkillMitra/
 
 🙌 Acknowledgment:--
 This project was developed with the assistance of AI tools (GPT) as part of my learning journey in web development.
+
+🚀 Live Demo
+Check out the live project here:
+👉 https://akankshaakki16.pythonanywhere.com/login/
