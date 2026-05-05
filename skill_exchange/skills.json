@@ -1,0 +1,17 @@
+[
+  {
+    "model": "core.skill",
+    "pk": 1,
+    "fields": { "name": "Python Programming" }
+  },
+  {
+    "model": "core.skill",
+    "pk": 2,
+    "fields": { "name": "Graphic Design" }
+  },
+  {
+    "model": "core.skill",
+    "pk": 3,
+    "fields": { "name": "Violin" }
+  }
+]

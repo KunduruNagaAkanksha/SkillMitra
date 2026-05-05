@@ -1,0 +1,39 @@
+{% extends 'core/base.html' %}
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-6">
+        <div class="card shadow-lg rounded-4 border-0 p-4">
+            <h2 class="fw-bold mb-4">Update Your Skills</h2>
+            <form method="POST">
+                {% csrf_token %}
+                
+                <div class="mb-4">
+                    <label class="form-label fw-bold">Choose or Type a Skill</label>
+                    <input list="skill-options" name="skill_name" class="form-control form-control-lg border-2" placeholder="e.g. Photoshop, Guitar, SEO..." required>
+                    <datalist id="skill-options">
+                        {% for skill in all_skills %}
+                            <option value="{{ skill.name }}">
+                        {% endfor %}
+                    </datalist>
+                    <div class="form-text mt-2">Can't find your skill? Just type it in and we'll add it!</div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label fw-bold">Are you teaching or learning?</label>
+                    <select name="action" class="form-select border-2">
+                        <option value="teach">I want to Teach this (Expert)</option>
+                        <option value="learn">I want to Learn this (Student)</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100 py-3 fw-bold rounded-3 shadow-sm">
+                    Add to My Profile
+                </button>
+            </form>
+            <div class="text-center mt-4 border-top pt-3">
+                <a href="{% url 'dashboard' %}" class="text-muted text-decoration-none small">Back to Dashboard</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

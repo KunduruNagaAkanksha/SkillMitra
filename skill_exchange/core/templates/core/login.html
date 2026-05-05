@@ -1,0 +1,70 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div class="row justify-content-center align-items-center" style="min-height: 80vh;">
+    <div class="col-md-5 col-lg-4">
+        <div class="card shadow-lg border-0 rounded-4 overflow-hidden">
+            <div style="height: 5px; background-color: #0d6efd;"></div>
+            
+            <div class="card-body p-5">
+                <div class="text-center mb-4">
+                    <div class="display-6 mb-2">🔄</div>
+                    <h1 class="h3 fw-bold mb-1">Welcome Back</h1>
+                    <p class="text-muted small">Sign in to continue swapping skills</p>
+                </div>
+
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3 custom-form-group">
+                        {{ form.as_p }}
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100 py-2 fw-bold shadow-sm rounded-3">
+                        Sign In
+                    </button>
+                </form>
+
+                <div class="mt-4 pt-3 border-top text-center">
+                    <p class="mb-1 text-muted small">New to the community?</p>
+                    <a href="{% url 'signup' %}" class="fw-bold text-decoration-none text-primary">
+                        Create an Account
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="text-center mt-4">
+            <p class="text-muted" style="font-size: 0.8rem;">
+                &copy; 2026 SkillSwap Platform • College Project
+            </p>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* This makes the Django default form fields look better with Bootstrap */
+    .custom-form-group p {
+        margin-bottom: 1rem;
+    }
+    .custom-form-group input {
+        display: block;
+        width: 100%;
+        padding: 0.375rem 0.75rem;
+        font-size: 1rem;
+        font-weight: 400;
+        line-height: 1.5;
+        color: #212529;
+        background-color: #fff;
+        background-clip: padding-box;
+        border: 1px solid #dee2e6;
+        border-radius: 0.375rem;
+        transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    }
+    .custom-form-group input:focus {
+        border-color: #86b7fe;
+        outline: 0;
+        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+    }
+</style>
+{% endblock %}

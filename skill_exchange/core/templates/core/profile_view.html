@@ -1,0 +1,58 @@
+{% extends 'core/base.html' %}
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm rounded-4 text-center p-4 mb-4">
+                <div class="mb-3">
+                    <span class="display-1 bg-light rounded-circle p-4 border d-inline-block">👤</span>
+                </div>
+                <h3 class="fw-bold">{{ target_user.username }}</h3>
+                <p class="text-muted">Member since {{ target_user.date_joined|date:"M Y" }}</p>
+                <div class="d-flex justify-content-center gap-3 mt-2">
+                    <div class="px-3 py-2 bg-success-subtle text-success rounded-pill small fw-bold">
+                        {{ target_user.profile.points }} Points
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
+                <h4 class="fw-bold mb-4">Expertise (Can Teach)</h4>
+                <div class="row g-3">
+                    {% for skill in teaching_skills %}
+                    <div class="col-sm-6">
+                        <div class="p-3 border rounded-3 d-flex justify-content-between align-items-center hover-shadow">
+                            <span class="fw-bold">{{ skill.skill.name }}</span>
+                            <a href="{% url 'send_request' target_user.id skill.skill.id %}" class="btn btn-primary btn-sm rounded-pill px-3">
+                                Swap Skill
+                            </a>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <p class="text-muted">This user hasn't listed any teaching skills yet.</p>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="card border-0 shadow-sm rounded-4 p-4">
+                <h4 class="fw-bold mb-4">Learning Goals</h4>
+                <div class="d-flex flex-wrap gap-2">
+                    {% for skill in learning_skills %}
+                    <span class="badge bg-light text-dark border p-3 rounded-pill fw-normal">
+                        📚 {{ skill.skill.name }}
+                    </span>
+                    {% empty %}
+                    <p class="text-muted">No learning goals listed yet.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .hover-shadow:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.05); transition: 0.3s; }
+</style>
+{% endblock %}

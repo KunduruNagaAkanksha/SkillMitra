@@ -1,0 +1,21 @@
+{% extends 'core/base.html' %}
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow">
+        <div class="card-body">
+            <h3>Accept Request from {{ req.sender.username }}</h3>
+            <p>You are agreeing to teach <strong>{{ req.skill.name }}</strong>.</p>
+            
+            <form method="POST">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label class="form-label">Paste Google Meet / Zoom Link:</label>
+                    <input type="url" name="meeting_link" class="form-control" placeholder="https://meet.google.com/..." required>
+                </div>
+                <button type="submit" class="btn btn-success">Confirm & Send Link</button>
+                <a href="{% url 'dashboard' %}" class="btn btn-secondary">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

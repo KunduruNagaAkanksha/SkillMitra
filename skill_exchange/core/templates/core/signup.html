@@ -1,0 +1,23 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-5">
+        <div class="card shadow-lg p-4 rounded-4 border-0">
+            <div class="card-body">
+                <h2 class="text-center fw-bold mb-4">Join SkillMitra</h2>
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-3 custom-form-group">
+                        {{ form.as_p }}
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100 mb-3 shadow-sm fw-bold py-2">Create Account</button>
+                </form>
+                <div class="text-center">
+                    <small class="text-muted">Already have an account? <a href="{% url 'login' %}" class="text-decoration-none fw-bold">Login here</a></small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

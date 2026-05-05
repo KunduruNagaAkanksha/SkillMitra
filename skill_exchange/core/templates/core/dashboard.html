@@ -1,0 +1,151 @@
+{% extends 'core/base.html' %}
+{% block content %}
+<div class="container mt-5">
+    <h2 class="fw-bold">Welcome back, {{ user.username }} 👋</h2>
+    <p class="text-muted">Exchange skills, earn points, grow together.</p>
+
+    <div class="row g-4 mb-5 mt-2">
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm rounded-4 p-4 bg-light">
+                <h1 class="fw-bold text-success">{{ user.profile.points }}</h1>
+                <p class="text-muted mb-0">Points balance</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm rounded-4 p-4 bg-light">
+                <h1 class="fw-bold text-primary">{{ stats.hours_taught|default:0 }}</h1> 
+                <p class="text-muted mb-0">Hours taught</p>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm rounded-4 p-4 bg-light">
+                <h1 class="fw-bold text-warning">{{ stats.skills_learned|default:0 }}</h1>
+                <p class="text-muted mb-0">Skills learned</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-5 py-5 bg-white shadow-sm rounded-4 text-center border">
+        <div class="col-md-10 mx-auto">
+            <h2 class="fw-bold mb-3">What do you want to learn today?</h2>
+            <form method="GET" action="{% url 'dashboard' %}" class="d-flex justify-content-center">
+                <div class="input-group input-group-lg w-75 shadow-sm">
+                    <span class="input-group-text bg-white border-end-0">🔍</span>
+                    <input type="text" 
+                        name="search" 
+                        class="form-control border-start-0 border-end-0" 
+                        placeholder="Search skills like 'Python'..." 
+                        value="{{ search_query }}">
+                    <button type="submit" class="btn btn-primary px-5 fw-bold">Search</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card shadow-sm mb-4 border-0 rounded-3">
+                <div class="card-body text-center">
+                    <a href="{% url 'add_skill' %}" class="btn btn-primary w-100 py-2 shadow-sm fw-bold">＋ Add New Skill</a>
+                </div>
+            </div>
+
+            <div class="card shadow-sm mb-4 border-0 rounded-3">
+                <div class="card-body">
+                    <h5 class="fw-bold mb-3 border-bottom pb-2">Incoming Requests</h5>
+                    {% for req in incoming %}
+                        <div class="bg-light p-3 rounded-3 mb-2 border">
+                            <p class="mb-2 small"><strong>{{ req.sender.username }}</strong> wants to learn <strong>{{ req.skill.name }}</strong></p>
+                            <a href="{% url 'accept_request' req.id %}" class="btn btn-success btn-sm w-100 fw-bold">Accept & Send Link</a>
+                        </div>
+                    {% empty %}
+                        <p class="text-muted small mb-0">No new requests.</p>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="card shadow-sm mb-4 border-0 rounded-3 border-start border-primary border-5">
+                <div class="card-body">
+                    <h5 class="fw-bold mb-3 border-bottom pb-2">My Learning Sessions</h5>
+                    {% for req in accepted_sent %}
+                        <div class="alert alert-primary shadow-sm p-3 mb-3 border-0">
+                            <p class="small mb-2"><strong>{{ req.receiver.username }}</strong> is teaching you <strong>{{ req.skill.name }}</strong></p>
+                            <div class="d-grid gap-2">
+                                <a href="{{ req.meeting_link }}" target="_blank" class="btn btn-primary btn-sm fw-bold">Join Meet</a>
+                                <div class="btn-group w-100">
+                                    <a href="{% url 'complete_exchange' req.id %}" class="btn btn-success btn-sm">Finish & Pay</a>
+                                    <a href="{% url 'dispute_exchange' req.id %}" class="btn btn-outline-danger btn-sm">Report</a>
+                                </div>
+                            </div>
+                        </div>
+                    {% empty %}
+                        <p class="text-muted small mb-0">No active sessions.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <div class="mb-5">
+                <h4 class="fw-bold mb-3 d-flex align-items-center">
+                    <span class="me-2">✨</span> Recommended Matches
+                </h4>
+                <div class="row">
+                    {% for match in matches %}
+                        <div class="col-md-6 mb-3">
+                            <div class="card h-100 shadow-sm border-primary border-opacity-25 rounded-3 border-2">
+                                <div class="card-body">
+                                    <h5 class="card-title fw-bold text-primary">{{ match.user.username }}</h5>
+                                    <p class="card-text mb-3">Teaches: <span class="badge bg-info text-dark">{{ match.skill.name }}</span></p>
+                                    <a href="{% url 'send_request' match.user.id match.skill.id %}" class="btn btn-sm btn-primary w-100">Send Request</a>
+                                </div>
+                            </div>
+                        </div>
+                    {% empty %}
+                        <div class="col-12">
+                            <div class="p-4 bg-white rounded-3 text-center border border-dashed">
+                                <p class="text-muted mb-0">No matches yet. Try adding more skills you want to learn!</p>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div>
+                <h4 class="fw-bold mb-3 d-flex align-items-center">
+                    <span class="me-2">🌎</span> Our Community
+                </h4>
+                <div class="row">
+                    {% for profile in community %}
+                        <div class="col-md-6 mb-4">
+                            <div class="card h-100 shadow-sm border-0 rounded-4 overflow-hidden">
+                                <div class="card-body text-center p-4">
+                                    <div class="rounded-circle bg-light d-inline-block p-3 mb-3 border">
+                                        <span class="h2">👤</span>
+                                    </div>
+                                    <h5 class="fw-bold mb-1">{{ profile.user.username }}</h5>
+                                    <div class="text-muted small mb-3">
+                                        Expertise: 
+                                        {% for us in profile.user.userskill_set.all %}
+                                            {% if us.is_offering %}
+                                                <span class="badge bg-success-subtle text-success border fw-normal">{{ us.skill.name }}</span>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                    <a href="{% url 'view_profile' profile.user.id %}" class="btn btn-outline-primary btn-sm px-4 rounded-pill">View Profile</a>
+                                </div>
+                            </div>
+                        </div>
+                    {% empty %}
+                        <div class="text-center py-5">
+                            <p class="text-muted">No users found matching "{{ search_query }}".</p>
+                            <a href="{% url 'dashboard' %}" class="btn btn-sm btn-link text-decoration-none">View all users</a>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

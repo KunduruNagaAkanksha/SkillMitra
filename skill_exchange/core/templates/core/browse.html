@@ -1,0 +1,79 @@
+{% extends 'core/base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4">
+        <div class="mb-3 mb-md-0">
+            <h2 class="fw-bold">Browse Skills</h2>
+            <p class="text-muted">Find someone to learn from, or see who needs your help.</p>
+        </div>
+        
+        <form class="d-flex shadow-sm rounded-pill bg-white p-1" method="GET" action="{% url 'browse' %}">
+            <input class="form-control border-0 rounded-pill px-3" type="search" name="search" placeholder="Search skills (e.g. Python)" value="{{ search_query|default:'' }}">
+            <button class="btn btn-primary rounded-pill px-4" type="submit">Search</button>
+        </form>
+    </div>
+
+    <div class="d-flex gap-2 mb-4 overflow-auto pb-2" style="scrollbar-width: none;">
+            <a href="?category=All" 
+             class="btn {% if not selected_category or selected_category == 'All' %}btn-dark{% else %}btn-outline-secondary{% endif %} rounded-pill px-4">
+             All
+            </a>
+
+            <a href="?category=Tech" 
+              class="btn {% if selected_category == 'Tech' %}btn-dark{% else %}btn-outline-secondary{% endif %} rounded-pill px-4">
+             Tech
+            </a>
+
+            <a href="?category=Music" 
+            class="btn {% if selected_category == 'Music' %}btn-dark{% else %}btn-outline-secondary{% endif %} rounded-pill px-4">
+             Music
+            </a>
+
+            <a href="?category=Design" 
+            class="btn {% if selected_category == 'Design' %}btn-dark{% else %}btn-outline-secondary{% endif %} rounded-pill px-4">
+            Design
+            </a>
+
+            <a href="?category=Language" 
+               class="btn {% if selected_category == 'Language' %}btn-dark{% else %}btn-outline-secondary{% endif %} rounded-pill px-4">
+               Language
+            </a>
+    </div>
+
+    <div class="row g-4">
+        {% for entry in skills %}
+        <div class="col-md-4 col-sm-6">
+            <div class="card h-100 border-0 shadow-sm rounded-4 p-3">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <h5 class="fw-bold mb-0 text-dark">{{ entry.skill.name }}</h5>
+                    <span class="badge {% if entry.is_offering %}bg-success-subtle text-success{% else %}bg-primary-subtle text-primary{% endif %} rounded-pill">
+                        {% if entry.is_offering %}Offering{% else %}Requesting{% endif %}
+                    </span>
+                </div>
+                <p class="text-muted small mb-4">
+                    {% if entry.is_offering %}
+                        I am offering to teach {{ entry.skill.name }} to anyone interested.
+                    {% else %}
+                        I am looking for a mentor to help me master {{ entry.skill.name }}.
+                    {% endif %}
+                </p>
+                
+                <div class="d-flex align-items-center justify-content-between mt-auto pt-3 border-top">
+                    <div class="d-flex align-items-center">
+                        <div class="bg-light rounded-circle text-center pt-1 me-2" style="width: 35px; height: 35px; font-size: 0.9rem;">👤</div>
+                        <span class="small fw-bold text-secondary">{{ entry.user.username }}</span>
+                    </div>
+                    <a href="{% url 'send_request' entry.user.id entry.skill.id %}" class="btn btn-outline-dark btn-sm rounded-pill px-3 fw-bold">Connect</a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center py-5">
+            <div class="display-1 text-muted opacity-25">🔍</div>
+            <h4 class="text-muted mt-3">No skills found matching your search.</h4>
+            <a href="{% url 'browse' %}" class="btn btn-link text-decoration-none">Clear search and see all</a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
